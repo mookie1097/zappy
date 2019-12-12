@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<title>Zappy time!</title>
+
+<body>
+
+	<h1>The onclick Event</h1>
+
+	<p>The onclick event is used to trigger a function when an element is clicked on.</p>
+
+	<p>Click the button to trigger a function that will output "Hello World" in a p element with id="demo".</p>
+
+	<button class="zap-button" data-key="1">Relay one</button>
+	<button class="zap-button" data-key="2">Relay two</button>
+	<button class="zap-button" data-key="3">Relay three</button>
+	<button class="zap-button" data-key="4">Relay four</button>
+
+	<p id="info1"></p><br>
+	<p id="info2"></p><br>
+	<p id="info3"></p><br>
+	<p id="info4"></p><br>
+
+	<p id="debug"></p>
+
+	<script>
+		////Websocket bs
+		let socket = new WebSocket("ws://localhost:8765");
+
+		socket.onopen = function (e) {
+			document.getElementById("debug").innerHTML = "[open] Connection established";
+
+		};
+
+		socket.onmessage = function (event) {
+			document.getElementById(`info${button.dataset.key}`).innerHTML = `[message] Data received from server: ${event.data}`;
+
+		};
+
+		socket.onclose = function (event) {
+			if (event.wasClean) {
+				document.getElementById("debug").innerHTML = `[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`;
+
+			} else {
+				// e.g. server process killed or network down
+				// event.code is usually 1006 in this case
+				document.getElementById("debug").innerHTML = '[close] Connection died';
+
+			}
+		};
+		socket.onerror = function (error) {
+			alert(`[error] ${error.message}`);
+		};
+
+		////////start of other stuff
+		var timers = {
+			1: timer1 = null,
+			2: timer2 = null,
+			3: timer3 = null,
+			4: timer4 = null
+		}
+
+		for (const button of document.querySelectorAll("button.zap-button")) {
+			button.addEventListener("mouseout", () => cancel(button));
+			button.addEventListener("mouseup", () => cancel(button));
+
+			button.addEventListener("mousedown", () => {
+				// send the notification 10 times every second
+				cancel(button);
+				timers[button.dataset.key] = setInterval(() => {
+					document.getElementById(`info${button.dataset.key}`).innerHTML = `sent for ${button.dataset.key}`
+				}, 100);
+			});
+		}
+
+		function cancel(btn) {
+			if (btn === null) {
+				for (let i = 1; i++; i <= 4) {
+					if (timers[i] != null) {
+						clearInterval(timers[i]);
+						timers[i] = null;
+					}
+				}
+				return;
+			}
+
+			document.getElementById(`info${button.dataset.key}`).innerHTML = `canceled for ${btn.dataset.key}`
+			if (timers[btn.dataset.key] != null) {
+				clearInterval(timers[btn.dataset.key]);
+				timers[btn.dataset.key] = null;
+			}
+		}
+
+		document.addEventListener("blur", () => cancel(null));
+
+
+
+
+
+	</script>
+
+</body>
+
+</html>
