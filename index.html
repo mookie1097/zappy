@@ -16,7 +16,7 @@ ul { list-style: none; }
     margin: 1em;
 }
 .zap-button:hover { background: #b688d1; }
-.zap-button:active { background: #661c91; }
+.zap-button.btn-active { background: #661c91; }
 .nosel { -moz-user-select: none; -khtml-user-select: none; -webkit-user-select: none; -ms-user-select: none; user-select: none; }
     </style>
 </head>
@@ -87,6 +87,7 @@ for (const button of document.querySelectorAll("button.zap-button")) {
     });
     ["touchstart", "mousedown"].forEach(evt => button.addEventListener(evt, (e) => {
         cancel(button);
+        button.classList.add("btn-active");
         timers[button.dataset.key] = setInterval(() => {
             // socket.send(`1${button.dataset.key}`);
             document.getElementById(`info${button.dataset.key}`).innerHTML =
@@ -108,6 +109,7 @@ function cancel(btn) {
     }
     // socket.send(`0${btn.dataset.key}`);
 
+    btn.classList.remove("btn-active");
     if (timers[btn.dataset.key]) {
         document.getElementById(`info${btn.dataset.key}`).innerHTML = `canceled for ${btn.dataset.key}`
         clearInterval(timers[btn.dataset.key]);
