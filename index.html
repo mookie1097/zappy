@@ -130,13 +130,16 @@
             ["touchstart", "mousedown"].forEach(evt => button.addEventListener(evt, (e) => {
                 cancel(button);
                 button.classList.add("btn-active");
-                timers[button.dataset.key] = setInterval(() => {
-                    socket.send(`1${button.dataset.key}`);
-                    document.getElementById(`info${button.dataset.key}`).innerHTML =
-                        `sent for ${button.dataset.key}`;
-                }, 100);
+                send(button);
+                timers[button.dataset.key] = setInterval(() => send(button), 100);
                 e.preventDefault();
             }));
+        }
+
+        function send(button) {
+            socket.send(`1${button.dataset.key}`);
+            document.getElementById(`info${button.dataset.key}`).innerHTML =
+                `sent for ${button.dataset.key}`;
         }
 
         function cancel(btn) {
