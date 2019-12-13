@@ -1,107 +1,121 @@
 <!DOCTYPE html>
 <html>
-<title>Zappy time!</title>
+<head>
+    <meta charset="utf-8">
+    <title>Zappy time!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+body { padding: 1em; max-width: 600px; margin: 0 auto; }
+.row { display: flex; flex-direction: row; }
+.col { display: flex; flex-direction: column; }
+.col.hcenter { align-items: center; }
+ul { list-style: none; }
+.zap-button {
+    background: #b547f5; border: none; border-radius: 8px;
+    width: 400px; height: 100px;
+    margin: 1em;
+}
+.zap-button:hover { background: #b688d1; }
+.zap-button:active { background: #661c91; }
+.nosel { -moz-user-select: none; -khtml-user-select: none; -webkit-user-select: none; -ms-user-select: none; user-select: none; }
+    </style>
+</head>
+<body class="col">
+    <ul class="l-none buttons col hcenter">
+        <li><button class="zap-button nosel" data-key="1">Relay one</button></li>
+        <li><button class="zap-button nosel" data-key="2">Relay two</button></li>
+        <li><button class="zap-button nosel" data-key="3">Relay three</button></li>
+        <li><button class="zap-button nosel" data-key="4">Relay four</button></li>
+    </ul>
 
-<body>
-
-	<h1>The onclick Event</h1>
-
-	<p>The onclick event is used to trigger a function when an element is clicked on.</p>
-
-	<p>Click the button to trigger a function that will output "Hello World" in a p element with id="demo".</p>
-
-	<button class="zap-button" data-key="1">Relay one</button>
-	<button class="zap-button" data-key="2">Relay two</button>
-	<button class="zap-button" data-key="3">Relay three</button>
-	<button class="zap-button" data-key="4">Relay four</button>
-
-	<p id="info1"></p><br>
-	<p id="info2"></p><br>
-	<p id="info3"></p><br>
-	<p id="info4"></p><br>
-
+	<p id="info1"></p>
+	<p id="info2"></p>
+	<p id="info3"></p>
+	<p id="info4"></p>
 	<p id="debug"></p>
 
 	<script>
-		////Websocket bs 
-		// TODO CHANGEME TO YOUR HOSTNAME OR IP
-		let socket = new WebSocket("ws://10.0.0.108:8765");
+////Websocket bs
+// TODO CHANGEME TO YOUR HOSTNAME OR IP
+/*
+let socket = new WebSocket("ws://10.0.0.108:8765");
 
-		socket.onopen = function (e) {
-			document.getElementById("debug").innerHTML = "[open] Connection established";
+socket.onopen = (event) => {
+    document.getElementById("debug").innerHTML =
+        "[open] Connection established";
+};
 
-		};
+socket.onmessage = (event) => {
+    document.getElementById(`info${button.dataset.key}`).innerHTML =
+        `[message] Data received from server: ${event.data}`;
+};
 
-		socket.onmessage = function (event) {
-			document.getElementById(`info${button.dataset.key}`).innerHTML = `[message] Data received from server: ${event.data}`;
+socket.onclose = (event) => {
+    if (event.wasClean) {
+        document.getElementById("debug").innerHTML =
+            `[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`;
+    } else {
+        // e.g. server process killed or network down
+        // event.code is usually 1006 in this case
+        document.getElementById("debug").innerHTML = '[close] Connection died';
+    }
+};
 
-		};
+socket.onerror = (error) => {
+    alert(`[error] ${error.message}`);
+};
+*/
 
-		socket.onclose = function (event) {
-			if (event.wasClean) {
-				document.getElementById("debug").innerHTML = `[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`;
+////////start of other stuff
+let timers = {};
 
-			} else {
-				// e.g. server process killed or network down
-				// event.code is usually 1006 in this case
-				document.getElementById("debug").innerHTML = '[close] Connection died';
+for (const button of document.querySelectorAll("button.zap-button")) {
+    button.addEventListener("mouseout", () => cancel(button));
+    button.addEventListener("mouseup", () => cancel(button));
+    button.addEventListener("touchend", () => cancel(button));
+    button.addEventListener("touchcancel", () => cancel(button));
+    button.addEventListener("touchmove", (e) => {
+        const touches = e.targetTouches;
+        for (let i = 0; i < touches.length; i++) {
+            const touch = touches.item(i);
+            const elt = document.elementFromPoint(touch.clientX, touch.clientY);
+            if (elt != button) {
+                cancel(button);
+                return;
+            }
+        }
+    });
+    ["touchstart", "mousedown"].forEach(evt => button.addEventListener(evt, (e) => {
+        cancel(button);
+        timers[button.dataset.key] = setInterval(() => {
+            // socket.send(`1${button.dataset.key}`);
+            document.getElementById(`info${button.dataset.key}`).innerHTML =
+                `sent for ${button.dataset.key}`;
+        }, 100);
+        e.preventDefault();
+    }));
+}
 
-			}
-		};
-		socket.onerror = function (error) {
-			alert(`[error] ${error.message}`);
-		};
+function cancel(btn) {
+    if (btn === null) {
+        for (let i = 1; i <= 4; i++) {
+            if (timers[i]) {
+                clearInterval(timers[i]);
+                timers[i] = null;
+            }
+        }
+        return;
+    }
+    // socket.send(`0${btn.dataset.key}`);
 
-		////////start of other stuff
-		var timers = {
-			1: timer1 = null,
-			2: timer2 = null,
-			3: timer3 = null,
-			4: timer4 = null
-		}
+    if (timers[btn.dataset.key]) {
+        document.getElementById(`info${btn.dataset.key}`).innerHTML = `canceled for ${btn.dataset.key}`
+        clearInterval(timers[btn.dataset.key]);
+        timers[btn.dataset.key] = null;
+    }
+}
 
-		for (const button of document.querySelectorAll("button.zap-button")) {
-			button.addEventListener("mouseout", () => cancel(button));
-			button.addEventListener("mouseup", () => cancel(button));
-
-			button.addEventListener("mousedown", () => {
-				// send the notification 10 times every second
-				cancel(button);
-				timers[button.dataset.key] = setInterval(() => {
-					socket.send(`1${button.dataset.key}`);
-					document.getElementById(`info${button.dataset.key}`).innerHTML = `sent for ${button.dataset.key}`;
-				}, 100);
-			});
-		}
-
-		function cancel(btn) {
-			if (btn === null) {
-				for (let i = 1; i++; i <= 4) {
-					if (timers[i] != null) {
-						clearInterval(timers[i]);
-						timers[i] = null;
-					}
-				}
-				return;
-			}
-			socket.send(`0${btn.dataset.key}`);
-
-
-			document.getElementById(`info${btn.dataset.key}`).innerHTML = `canceled for ${btn.dataset.key}`
-			if (timers[btn.dataset.key] != null) {
-				clearInterval(timers[btn.dataset.key]);
-				timers[btn.dataset.key] = null;
-			}
-		}
-
-		document.addEventListener("blur", () => cancel(null));
-
-
-
-
-
+document.addEventListener("blur", () => cancel(null));
 	</script>
-
 </body>
-
 </html>
