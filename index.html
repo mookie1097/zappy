@@ -68,12 +68,14 @@ socket.onerror = (error) => {
 
 ////////start of other stuff
 let timers = {};
+let buttons = {};
 
 for (const button of document.querySelectorAll("button.zap-button")) {
-    button.addEventListener("mouseout", () => cancel(button));
-    button.addEventListener("mouseup", () => cancel(button));
-    button.addEventListener("touchend", () => cancel(button));
-    button.addEventListener("touchcancel", () => cancel(button));
+    buttons[button.dataset.key] = button;
+    for (const evt of ["mouseout", "mouseup", "touchend", "touchcancel"]) {
+        button.addEventListener(evt, () => cancel(button));
+    }
+    // Cancel timers if the touch moves off the touch target.
     button.addEventListener("touchmove", (e) => {
         const touches = e.targetTouches;
         for (let i = 0; i < touches.length; i++) {
@@ -99,16 +101,13 @@ for (const button of document.querySelectorAll("button.zap-button")) {
 
 function cancel(btn) {
     if (btn === null) {
-        for (let i = 1; i <= 4; i++) {
-            if (timers[i]) {
-                clearInterval(timers[i]);
-                timers[i] = null;
-            }
+        for (const button of Object.values(buttons)) {
+            cancel(button);
         }
         return;
     }
-    // socket.send(`0${btn.dataset.key}`);
 
+    // socket.send(`0${btn.dataset.key}`);
     btn.classList.remove("btn-active");
     if (timers[btn.dataset.key]) {
         document.getElementById(`info${btn.dataset.key}`).innerHTML = `canceled for ${btn.dataset.key}`
