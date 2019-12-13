@@ -23,8 +23,9 @@
 	<p id="debug"></p>
 
 	<script>
-		////Websocket bs
-		let socket = new WebSocket("ws://localhost:8765");
+		////Websocket bs 
+		// TODO CHANGEME TO YOUR HOSTNAME OR IP
+		let socket = new WebSocket("ws://10.0.0.108:8765");
 
 		socket.onopen = function (e) {
 			document.getElementById("debug").innerHTML = "[open] Connection established";
@@ -67,7 +68,8 @@
 				// send the notification 10 times every second
 				cancel(button);
 				timers[button.dataset.key] = setInterval(() => {
-					document.getElementById(`info${button.dataset.key}`).innerHTML = `sent for ${button.dataset.key}`
+					socket.send(`1${button.dataset.key}`);
+					document.getElementById(`info${button.dataset.key}`).innerHTML = `sent for ${button.dataset.key}`;
 				}, 100);
 			});
 		}
@@ -82,8 +84,10 @@
 				}
 				return;
 			}
+			socket.send(`0${btn.dataset.key}`);
 
-			document.getElementById(`info${button.dataset.key}`).innerHTML = `canceled for ${btn.dataset.key}`
+
+			document.getElementById(`info${btn.dataset.key}`).innerHTML = `canceled for ${btn.dataset.key}`
 			if (timers[btn.dataset.key] != null) {
 				clearInterval(timers[btn.dataset.key]);
 				timers[btn.dataset.key] = null;
