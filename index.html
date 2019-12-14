@@ -1,25 +1,65 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <title>Zappy time!</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- CSS and styleing done by @porglezomp -->
+    <!-- You don't want to know what it looked like before.... -->
+
     <style>
-body { padding: 1em; max-width: 600px; margin: 0 auto; }
-.row { display: flex; flex-direction: row; }
-.col { display: flex; flex-direction: column; }
-.col.hcenter { align-items: center; }
-ul { list-style: none; }
-.zap-button {
-    background: #b547f5; border: none; border-radius: 8px;
-    width: 400px; height: 100px;
-    margin: 1em;
-}
-.zap-button:hover { background: #b688d1; }
-.zap-button.btn-active { background: #661c91; }
-.nosel { -moz-user-select: none; -khtml-user-select: none; -webkit-user-select: none; -ms-user-select: none; user-select: none; }
+        body {
+            padding: 1em;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .row {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .col {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .col.hcenter {
+            align-items: center;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        .zap-button {
+            background: #b547f5;
+            border: none;
+            border-radius: 8px;
+            width: 400px;
+            height: 100px;
+            margin: 1em;
+        }
+
+        .zap-button:hover {
+            background: #b688d1;
+        }
+
+        .zap-button.btn-active {
+            background: #661c91;
+        }
+
+        .nosel {
+            -moz-user-select: none;
+            -khtml-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
     </style>
 </head>
+
 <body class="col">
     <ul class="l-none buttons col hcenter">
         <li><button class="zap-button nosel" data-key="1">Relay one</button></li>
@@ -28,95 +68,96 @@ ul { list-style: none; }
         <li><button class="zap-button nosel" data-key="4">Relay four</button></li>
     </ul>
 
-	<p id="info1"></p>
-	<p id="info2"></p>
-	<p id="info3"></p>
-	<p id="info4"></p>
-	<p id="debug"></p>
+    <p id="info1"></p>
+    <p id="info2"></p>
+    <p id="info3"></p>
+    <p id="info4"></p>
+    <p id="debug"></p>
 
-	<script>
-////Websocket bs
-// TODO CHANGEME TO YOUR HOSTNAME OR IP
-/*
-let socket = new WebSocket("ws://10.0.0.108:8765");
+    <script>
+        ////Websocket bs
+        var ip = location.hostname;
+        console.log(ip);
+        let socket = new WebSocket(`ws://${ip}:8765`);
 
-socket.onopen = (event) => {
-    document.getElementById("debug").innerHTML =
-        "[open] Connection established";
-};
+        socket.onopen = (event) => {
+            document.getElementById("debug").innerHTML =
+                "[open] Connection established";
+        };
 
-socket.onmessage = (event) => {
-    document.getElementById(`info${button.dataset.key}`).innerHTML =
-        `[message] Data received from server: ${event.data}`;
-};
+        socket.onmessage = (event) => {
+            document.getElementById(`info${button.dataset.key}`).innerHTML =
+                `[message] Data received from server: ${event.data}`;
+        };
 
-socket.onclose = (event) => {
-    if (event.wasClean) {
-        document.getElementById("debug").innerHTML =
-            `[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`;
-    } else {
-        // e.g. server process killed or network down
-        // event.code is usually 1006 in this case
-        document.getElementById("debug").innerHTML = '[close] Connection died';
-    }
-};
+        socket.onclose = (event) => {
+            if (event.wasClean) {
+                document.getElementById("debug").innerHTML =
+                    `[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`;
+            } else {
+                // e.g. server process killed or network down
+                // event.code is usually 1006 in this case
+                document.getElementById("debug").innerHTML = '[close] Connection died';
+            }
+        };
 
-socket.onerror = (error) => {
-    alert(`[error] ${error.message}`);
-};
-*/
+        socket.onerror = (error) => {
+            alert(`[error] ${error.message}`);
+        };
 
-////////start of other stuff
-let timers = {};
-let buttons = {};
 
-for (const button of document.querySelectorAll("button.zap-button")) {
-    buttons[button.dataset.key] = button;
-    for (const evt of ["mouseout", "mouseup", "touchend", "touchcancel"]) {
-        button.addEventListener(evt, () => cancel(button));
-    }
-    // Cancel timers if the touch moves off the touch target.
-    button.addEventListener("touchmove", (e) => {
-        const touches = e.targetTouches;
-        for (let i = 0; i < touches.length; i++) {
-            const touch = touches.item(i);
-            const elt = document.elementFromPoint(touch.clientX, touch.clientY);
-            if (elt != button) {
+        ////////start of other stuff
+        let timers = {};
+        let buttons = {};
+
+        for (const button of document.querySelectorAll("button.zap-button")) {
+            buttons[button.dataset.key] = button;
+            for (const evt of ["mouseout", "mouseup", "touchend", "touchcancel"]) {
+                button.addEventListener(evt, () => cancel(button));
+            }
+            // Cancel timers if the touch moves off the touch target.
+            button.addEventListener("touchmove", (e) => {
+                const touches = e.targetTouches;
+                for (let i = 0; i < touches.length; i++) {
+                    const touch = touches.item(i);
+                    const elt = document.elementFromPoint(touch.clientX, touch.clientY);
+                    if (elt != button) {
+                        cancel(button);
+                        return;
+                    }
+                }
+            });
+            ["touchstart", "mousedown"].forEach(evt => button.addEventListener(evt, (e) => {
                 cancel(button);
+                button.classList.add("btn-active");
+                timers[button.dataset.key] = setInterval(() => {
+                    socket.send(`1${button.dataset.key}`);
+                    document.getElementById(`info${button.dataset.key}`).innerHTML =
+                        `sent for ${button.dataset.key}`;
+                }, 100);
+                e.preventDefault();
+            }));
+        }
+
+        function cancel(btn) {
+            if (btn === null) {
+                for (const button of Object.values(buttons)) {
+                    cancel(button);
+                }
                 return;
             }
+
+            socket.send(`0${btn.dataset.key}`);
+            btn.classList.remove("btn-active");
+            if (timers[btn.dataset.key]) {
+                document.getElementById(`info${btn.dataset.key}`).innerHTML = `canceled for ${btn.dataset.key}`
+                clearInterval(timers[btn.dataset.key]);
+                timers[btn.dataset.key] = null;
+            }
         }
-    });
-    ["touchstart", "mousedown"].forEach(evt => button.addEventListener(evt, (e) => {
-        cancel(button);
-        button.classList.add("btn-active");
-        timers[button.dataset.key] = setInterval(() => {
-            // socket.send(`1${button.dataset.key}`);
-            document.getElementById(`info${button.dataset.key}`).innerHTML =
-                `sent for ${button.dataset.key}`;
-        }, 100);
-        e.preventDefault();
-    }));
-}
 
-function cancel(btn) {
-    if (btn === null) {
-        for (const button of Object.values(buttons)) {
-            cancel(button);
-        }
-        return;
-    }
-
-    // socket.send(`0${btn.dataset.key}`);
-    btn.classList.remove("btn-active");
-    if (timers[btn.dataset.key]) {
-        document.getElementById(`info${btn.dataset.key}`).innerHTML = `canceled for ${btn.dataset.key}`
-        clearInterval(timers[btn.dataset.key]);
-        timers[btn.dataset.key] = null;
-    }
-}
-
-document.addEventListener("blur", () => cancel(null));
-	</script>
+        document.addEventListener("blur", () => cancel(null));
+    </script>
 </body>
+
 </html>

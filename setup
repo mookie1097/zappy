@@ -1,0 +1,7 @@
+sudo hciconfig hci0 name zappyPi
+echo "PRETTY_HOSTNAME=zappyPi" | sudo tee /etc/machine-info
+
+
+sudo cp zappyServer /etc/init.d/zappyServer
+sudo chmod 755 /etc/init.d/zappyServer
+sudo update-rc.d zappyServer defaults
