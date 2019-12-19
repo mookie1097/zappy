@@ -127,7 +127,7 @@
                     }
                 }
             });
-            ["touchstart", "mousedown"].forEach(evt => button.addEventListener(evt, (e) => {
+            ["onclick", "touchstart", "mousedown"].forEach(evt => button.addEventListener(evt, (e) => {
                 cancel(button);
                 button.classList.add("btn-active");
                 send(button);
