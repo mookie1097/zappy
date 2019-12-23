@@ -23,11 +23,12 @@ startservers(){
   echo "Starting Zappy Server" >&2
   
   pushd $pth
+  source env/bin/activate
   sudo -H -u pi python3 -m http.server 8000 &
   echo $! > $PIDFILE1
   sudo -H -u pi python3 socketcontrol.py &
   echo $! > $PIDFILE2
-
+  deactivate
   sudo bash runbeacon.sh &
 
   popd

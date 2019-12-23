@@ -3,25 +3,26 @@
 
 import asyncio
 import websockets
-import pirelaycontrol
+#from pirelaycontrol import *
+from psudorelaycontrol import setRelay, cleanup, turnOffAll
 import sys
-import time
+import time, json
 
 async def socket(websocket, path):
 	while(True):
 		print("listening")
 		message = await websocket.recv()
-		print(f"< {message}")
+		print(f"message in: {message}")
 		if message == "off":
-			pirelaycontrol.turnOffAll()
-		messagge   = message.split()
-		offOrOn    = int(message[0])
-		intMessage = int(message[1])
-		print(f"{intMessage}, {offOrOn}")
-		pirelaycontrol.setRelay(intMessage, offOrOn)
+			turnOffAll()
+		j = json.loads(message)
+		print("json:", j)
 		
-		responce = f"recv {message}!"
+		setRelay(j['name'], j['state'])
+		
+		print(j['name'], j['state'])
 
+		responce = f"recv {message}!"
 		await websocket.send(responce) 
 		print(f"> {responce}")
 
@@ -31,5 +32,5 @@ asyncio.get_event_loop().run_until_complete(start_server)
 asyncio.get_event_loop().run_forever()
 
 
-pirelaycontrol.cleanup()
+cleanup()
 
