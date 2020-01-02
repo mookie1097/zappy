@@ -13,6 +13,8 @@ PIDFILE1=/var/run/zappyserver-1.pid
 PIDFILE2=/var/run/zappyserver-2.pid
 
 #PATH=/home/pi/zappy:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/bin
+
+# this is the path to the root directory of the folder, may need to be changed
 pth=/home/pi/zappy
 
 startservers(){
@@ -24,20 +26,15 @@ startservers(){
   
   pushd $pth
   source env/bin/activate
-  sudo -H -u pi python3 -m http.server 8000 &
+  sudo -H -u pi python3 -m http.server 8000 & # start simple web server
   echo $! > $PIDFILE1
-  sudo -H -u pi python3 socketcontrol.py &
+  sudo -H -u pi python3 python/socketcontrol.py & # run socket control 
   echo $! > $PIDFILE2
   deactivate
-  sudo bash runbeacon.sh &
-
+  sudo bash "service/runbeacon.sh" & # start the BLE beacon
   popd
-
-
-
-
-  
 }
+
 stopservers(){
   if [ ! -f "$PIDFILE1" ] || ! kill -0 $(cat "$PIDFILE1"); then
     echo 'Http service not running' >&2
@@ -53,8 +50,6 @@ stopservers(){
     kill -15 $(cat "$PIDFILE2") && rm -f "$PIDFILE2"
   fi
   echo "stopped" >&2
-
-  
 }
 case "$1" in
   start)

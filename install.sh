@@ -1,4 +1,5 @@
 #!/bin/bash
+#python setup stuff??? idk dont run this itll probably break shit
 
 sudo apt update
 sudo apt install python3-venv curl g++

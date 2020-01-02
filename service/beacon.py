@@ -3,7 +3,7 @@ import sys
 """Create eddystone btle beacon command for provided arg
 arg[1] should be ip (and port if needed) for http
 returns the command that must be run with superuser priv.
-hardcoded for http://
+hardcoded for http:// 
 """
 
 ip = sys.argv[1]

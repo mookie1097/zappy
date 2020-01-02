@@ -1,7 +1,9 @@
 # spec
 
 ## json
+
 types are `channel`, `relay`, and `program`
+
 ```json
 {
     "type": "channel",

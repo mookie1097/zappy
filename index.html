@@ -69,16 +69,16 @@
 
 <body class="col">
     <ul class="l-none buttons row hcenter">
-
-        <li><button class="zap-button nosel" data-key="1">Relay one</button></li>
-        <li><button class="zap-button nosel" data-key="2">Relay two</button></li>
-        <li><button class="zap-button nosel" data-key="3">Relay three</button></li>
-        <li><button class="zap-button nosel" data-key="4">Relay four</button></li>
+ 
+        <li><button class="zap-button nosel" data-type="relay" data-key="1">Relay one</button></li>
+        <li><button class="zap-button nosel" data-type="relay" data-key="2">Relay two</button></li>
+        <li><button class="zap-button nosel" data-type="relay" data-key="3">Relay three</button></li>
+        <li><button class="zap-button nosel" data-type="relay"  data-key="4">Relay four</button></li>
         <br></br>
-        <li><button class="zap-button nosel" data-key="p1">Pair 1</button></li>
-        <li><button class="zap-button nosel" data-key="p2">Pair 2</button></li>
-        <li><button class="zap-button nosel" data-key="p3">Pair 3</button></li>
-        <li><button class="zap-button nosel" data-key="p4">Pair 4</button></li>
+        <li><button class="zap-button nosel" type="channel" data-key="p1">Pair 1</button></li>
+        <li><button class="zap-button nosel" type="channel" data-key="p2">Pair 2</button></li>
+        <li><button class="zap-button nosel" type="subchannel" data-key="p3">Pair 3</button></li>
+        <li><button class="zap-button nosel" type="subchannel" data-key="p4">Pair 4</button></li>
         <br></br>
         <li><button class="zap-button nosel" data-key="prog1">Prog 4</button></li>
 
@@ -170,6 +170,7 @@
         function send(button) {
             var data = JSON.stringify({ "number": 1, "state": 1, "name": button.dataset.key}); 
             console.log(data);
+            console.log(button.dataset.type)
 
             socket.send(data); //`1${button.dataset.key}`);
 

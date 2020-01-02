@@ -1,4 +1,4 @@
-__pycache__/*
+**/__pycache__/*
 __pycache__/pirelaycontrol.cpython-37.pyc
 
 
@@ -6,8 +6,8 @@ __pycache__/pirelaycontrol.cpython-37.pyc
 #
 #already existing elements are commented out
 
-/target
 **/*.rs.bk
 env/
 node_modules/
 package.json
+rust/target/*

@@ -3,7 +3,7 @@
 
 import asyncio
 import websockets
-#from pirelaycontrol import *
+#from pirelaycontrol import setRelay, cleanup, turnOffAll
 from psudorelaycontrol import setRelay, cleanup, turnOffAll
 import sys
 import time, json
