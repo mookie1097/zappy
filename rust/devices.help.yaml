@@ -1,0 +1,19 @@
+
+# pins can be either a single one, or, 
+# for tens, positive and negative seperated.
+
+#devices can have multiple functions
+version: 0.0.1
+user_friendly_device_name:
+  - function 1:
+    - 1: #serialized channels etc
+      pins:
+        positive: 1
+        negative: 2
+    - 2:
+      pin: 4 
+  - function 2:
+    - 1: #even with only one channel you still need the serial
+      pin: 4
+#...etc
+  

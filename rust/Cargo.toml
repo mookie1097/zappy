@@ -7,4 +7,8 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-buttplug = "0.0.2"
+#buttplug = "0.0.2"
+#gpio = "0.4.1"
+# blurz = "0.4.0"
+serde_yaml = "0.8.11"
+

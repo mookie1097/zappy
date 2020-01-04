@@ -1,0 +1,27 @@
+version: 0.0.1
+tens:
+  - tens: #channels
+    - 1:
+      pins:
+        positive: 1
+        negative: 2
+    - 2:
+      pins:
+        positive: 3
+        negative: 4
+  - other:
+    - 1:
+      pins:
+hush:
+  - vibrate:
+    - 1:
+      min: 0
+      max: 10
+      pin: 30
+temp:
+  #this is an input
+  input:
+    type: tempriture
+    pin: 5
+
+  
