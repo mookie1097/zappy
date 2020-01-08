@@ -1,0 +1,19 @@
+for now, websocket connection
+
+Server start.
+	server reads config
+	parses config into device objects
+	starts websocket listener
+
+server loop
+	on recv connection
+	send out device config
+	keep alive and accept shit
+	on disconnect, turn everything off
+
+
+client start
+	connect to server
+	get config
+	parse and create ui
+		send to server when necessary

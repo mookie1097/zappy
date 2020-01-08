@@ -12,3 +12,4 @@ edition = "2018"
 gpio = "0.4.1"
 serde_yaml = "0.8.11"
 serde = { version = "1.0", features = ["derive"] }
+bluster = "0.1.2"

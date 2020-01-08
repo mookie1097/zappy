@@ -1,0 +1,20 @@
+version: 0.0.1
+
+# trying to get stuff stragigay in my head, as new functions are added they'll be added here.
+# x signifies not implimented
+
+functions: 
+  - tens X
+  - vibrator X
+
+pins:
+  - pair X
+    - positive X
+    - negative X
+  - pin X #single int 
+
+extra:
+  - min X
+  - max X
+  - step X
+  - delay? X
