@@ -1,0 +1,51 @@
+{
+  "version": "0.0.1",
+  "devices": [ // VEC
+    {
+      "name": "Zappy",
+      "functions": [ //VEC
+        {
+          "type": "tens",
+          "pins": [//VEC
+            {
+              "pair": { //MAP
+                "positive": 1,
+                "negative": 2
+              }
+            },
+            {
+              "pair": {
+                "positive": 3,
+                "negative": 4
+              }
+            },
+            {
+              "pin": 4
+            }
+          ]
+        },
+        {
+          "type": "vibrator",
+          "pins": [
+            {
+              "pin": 4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Hush",
+      "functions": [
+        {
+          "type": "vibrator",
+          "min": 0,
+          "max": 10,
+          "pins": {
+            "pin": 30
+          }
+        }
+      ]
+    }
+  ]
+}

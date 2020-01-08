@@ -17,3 +17,7 @@ user_friendly_device_name:
       pin: 4
 #...etc
   
+devname:
+  - function:
+    - 1: 
+      pin: 4

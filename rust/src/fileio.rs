@@ -1,20 +1,18 @@
+use crate::{Config,DeviceConfig};
+use serde_yaml;
 use std::collections::HashMap;
 use std::error::Error;
 use std::fs::File;
 use std::io::prelude::*;
 use std::path::Path;
-use serde_yaml;
-
-
-
 
 const DEVICES_FILENAME: &str = "devices.yaml";
 
-pub fn load() -> ServerDataMap {
+pub fn load() -> Config {
     // Create a path to the desired file
     let path = Path::new(DEVICES_FILENAME);
     let display = path.display();
-    //ServerDataMap;
+    //Config;
     // Open the path in read-only mode, returns `io::Result<File>`
     let mut file = match File::open(&path) {
         // The `description` method of `io::Error` returns a string that describes the error
@@ -28,19 +26,27 @@ pub fn load() -> ServerDataMap {
         Err(why) => panic!("couldn't read {}: {}", display, why.description()),
         Ok(_) => println!("{} contains:\n{}", display, s),
     }
-
-    match serde_json::from_str(&s) {
-        Ok(obj) => obj,
-        Err(_) => ServerDataMap {
-            map: HashMap::new(),
+    match serde_yaml::from_str(&s) {
+        Ok(obj) => {
+            println!("Config imported successfully");
+            //println!("{:?}", obj);
+            return obj;
+        }
+        Err(err) => {
+        println!("Config NOT imported successfully!");
+        println!("{}", err);
+            return Config {
+                version: "meow".to_string(),
+                devices: Vec::<DeviceConfig>::new(),
+            };
         },
     } //this is a return since theres no semicolon
 
     // `file` goes out of scope, and the file gets closed
 }
 
-pub fn store(map: &ServerDataMap) {
-    let serialized = match serde_json::to_string(&map) {
+pub fn store(map: &Config) {
+    let serialized = match serde_yaml::to_string(&map) {
         Err(why) => panic!("MEOW MEOW{}", why.description()),
         Ok(nya) => nya,
     };
