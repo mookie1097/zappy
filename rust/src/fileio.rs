@@ -1,4 +1,4 @@
-use crate::{Config,DeviceConfig};
+use crate::config::{Config, DeviceConfig};
 use serde_yaml;
 use std::collections::HashMap;
 use std::error::Error;
@@ -33,13 +33,13 @@ pub fn load() -> Config {
             return obj;
         }
         Err(err) => {
-        println!("Config NOT imported successfully!");
-        println!("{}", err);
+            println!("Config NOT imported successfully!");
+            println!("{}", err);
             return Config {
                 version: "meow".to_string(),
                 devices: Vec::<DeviceConfig>::new(),
             };
-        },
+        }
     } //this is a return since theres no semicolon
 
     // `file` goes out of scope, and the file gets closed

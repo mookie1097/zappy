@@ -1,4 +1,4 @@
-use crate::PinConfig;
+use crate::config::PinConfig;
 
 ////// ---- DEVICE ---- //////
 #[derive(Debug)]

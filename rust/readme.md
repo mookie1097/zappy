@@ -3,3 +3,5 @@ It could also be used in a more general sense with some modification.
 It will start off communicating with bluetooth, but may branch out later.
 
 
+these are required for bluetooth to work:
+sudo apt install libdbus-1-dev libdbus-1-3

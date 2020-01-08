@@ -9,7 +9,12 @@ edition = "2018"
 [dependencies]
 # buttplug = "0.0.2"
 # blurz = "0.4.0"
+bluster = "0.1.2"
 gpio = "0.4.1"
 serde_yaml = "0.8.11"
 serde = { version = "1.0", features = ["derive"] }
-bluster = "0.1.2"
+
+#futures = "0.1.25"
+#tokio = "0.1.13"
+#uuid = "0.7.1"
+
