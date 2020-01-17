@@ -1,4 +1,5 @@
 # setup the service initially
+# dont run this! use serviceInstall.sh!
 
 # this probably doesn't work, but should set the BTLE name to something else
 sudo hciconfig hci0 name zappyPi

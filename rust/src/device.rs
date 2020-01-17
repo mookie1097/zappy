@@ -4,7 +4,7 @@ use crate::config::PinConfig;
 #[derive(Debug)]
 pub struct Device {
 	pub name: String,
-	pub functions: Functions,
+	pub functions: Vec<Function>,
 }
 
 impl Device {
@@ -13,17 +13,28 @@ impl Device {
 	}
 }
 
-/////// ---- FUNCTION ---- ///////
+
+
+
+/////// ---- Function ---- ///////
 #[derive(Debug)]
-pub struct Functions {
-	pub tens: Vec<Tens>,
-	pub vibrator: Vec<Vibrator>,
+pub struct Function {
+	
+	pub name: String,
+	pub channels: Vec<Channel>,
 }
 
-pub trait Function {
-	// this is stuff that MUST be implimented
-	fn ping(&self);
-	fn getChannels(&self) -> Vec<Channel>;
+impl Function{
+	fn trigger(&self, channel: u32){
+		println!("hi");
+	}
+
+	fn ping(&self) {
+		println!("Pinging Vibrator {}", self.name);
+	}
+	fn getChannels(&self) -> Vec<Channel> {
+		return self.channels.clone();
+	}
 }
 
 /////// ---- channel and pin---- ///////
@@ -47,40 +58,6 @@ impl Channel {
 	}
 }
 
-// #[derive(Copy, Clone, Debug)]
-// pub enum Pin {
-// 	//from pinconfig in main
-// 	Pair { positive: u32, negative: u32 },
-// 	Pin(u32),
-// }
 
-/////// ---- TENS ---- ///////
-#[derive(Debug)]
-pub struct Tens {
-	pub name: String,
-	pub channels: Vec<Channel>,
-}
 
-impl Function for Tens {
-	fn ping(&self) {
-		println!("Pinging Tens {}", self.name);
-	}
-	fn getChannels(&self) -> Vec<Channel> {
-		return self.channels.clone();
-	}
-}
-/////// ---- Vibe ---- ///////
-#[derive(Debug)]
-pub struct Vibrator {
-	pub name: String,
-	pub channels: Vec<Channel>,
-}
 
-impl Function for Vibrator {
-	fn ping(&self) {
-		println!("Pinging Vibrator {}", self.name);
-	}
-	fn getChannels(&self) -> Vec<Channel> {
-		return self.channels.clone();
-	}
-}
