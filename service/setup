@@ -6,9 +6,10 @@ sudo hciconfig hci0 name zappyPi
 echo "PRETTY_HOSTNAME=zappyPi" | sudo tee /etc/machine-info
 
 # the python scripts needs websockets
-pip install websockets
+# this is done in install!
+# pip install websockets
 
 # copy the file into init.d and update
-sudo cp zappyServer /etc/init.d/zappyServer
+sudo cp service/zappyServer /etc/init.d/zappyServer
 sudo chmod 755 /etc/init.d/zappyServer
-sudo update-rc.d zappyServer defaults
+sudo update-rc.d service/zappyServer defaults
