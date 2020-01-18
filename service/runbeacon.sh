@@ -8,8 +8,16 @@ while [[ $ipaddr == "" ]] ; do
     #echo $ipaddr
 done
 
+echo display ip
+source env/bin/activate
+python3 service/meow.py $ipaddr
+deactivate
+
+
+echo bt beacon ip
 hciconfig hci0 up
 hciconfig hci0 leadv 3
-cmd=$(python3 beacon.py $ipaddr:8000)
+cmd=$(python3 service/beacon.py $ipaddr:8000)
 #echo $cmd
-exec $cmd
+#exec $cmd
+
