@@ -9,14 +9,13 @@ python3 -m venv env
 
 source env/bin/activate
 
-echo "install into venv"
+    echo "install into venv"
 
-pip3 install --upgrade pip 
+    pip3 install --upgrade pip 
 
-pip install websockets # pylint # buttplug nodeenv autopep8 flask sh arrow
+    pip install websockets # pylint # buttplug nodeenv autopep8 flask sh arrow
 
-pip3 install adafruit-circuitpython-lis3dh adafruit-circuitpython-ssd1306
-
+    pip3 install adafruit-circuitpython-lis3dh adafruit-circuitpython-ssd1306
 
 deactivate
 
