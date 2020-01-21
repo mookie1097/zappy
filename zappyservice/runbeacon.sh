@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ipaddr="0"
+ipaddr=""
 #echo $ipaddr
 while [[ $ipaddr == "" ]] ; do
     sleep 1
@@ -10,15 +10,14 @@ done
 
 echo display ip
 source env/bin/activate
-python3 meow.py $ipaddr
+python3 python/display.py $ipaddr
 
 
 echo bt beacon ip
 hciconfig hci0 up
 hciconfig hci0 leadv 3
-cmd=$(python3 beacon.py $ipaddr:8000)
+cmd=$(python3 python/beacon.py $ipaddr:8000)
 deactivate
-
 #echo $cmd
 exec $cmd
 

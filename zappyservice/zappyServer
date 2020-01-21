@@ -24,16 +24,16 @@ startservers(){
   fi
   echo "Starting Zappy Server" >&2
   
-  pushd $pth
+  pushd $pth #root dir for zappyservice
    source env/bin/activate
    sudo -H -u pi python3 -m http.server 8000 & # start simple web server
    echo $! > $PIDFILE1
    sudo -H -u pi python3 python/socketcontrol.py & # run socket control 
    echo $! > $PIDFILE2
    deactivate
-   pushd service
-    sudo bash "runbeacon.sh" & # start the BLE beacon
-   popd
+   
+   sudo bash "runbeacon.sh" & # start the BLE beacon
+   
   popd
 }
 
