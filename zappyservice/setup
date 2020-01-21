@@ -7,6 +7,6 @@ echo "PRETTY_HOSTNAME=zappyPi" | sudo tee /etc/machine-info
 
 
 # copy the file into init.d and update
-sudo cp service/zappyServer /etc/init.d/zappyServer
+sudo cp zappyServer /etc/init.d/zappyServer
 sudo chmod 755 /etc/init.d/zappyServer
 sudo update-rc.d zappyServer defaults

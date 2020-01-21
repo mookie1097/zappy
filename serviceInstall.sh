@@ -11,10 +11,13 @@ pushd python ## in python dir now ##
     source env/bin/activate
         echo "install into venv"
         pip3 install --upgrade pip3
+        echo "installing websockets and pillow"
         pip3 install websockets pillow 
+        echo "installing adafruit libs"
         pip3 install adafruit-circuitpython-lis3dh adafruit-circuitpython-ssd1306
     deactivate
 popd
 
 echo "install service"
 bash setup
+popd
