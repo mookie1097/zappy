@@ -7,17 +7,22 @@ while [[ $ipaddr == "" ]] ; do
     ipaddr="$(ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1')"
     #echo $ipaddr
 done
-
+pwd
+pwd
+pwd
 echo display ip
+pushd python
 source env/bin/activate
-python3 python/display.py $ipaddr
+which python3
+python3 display.py $ipaddr
 
 
 echo bt beacon ip
 hciconfig hci0 up
 hciconfig hci0 leadv 3
-cmd=$(python3 python/beacon.py $ipaddr:8000)
+cmd=$(python3 beacon.py $ipaddr:8000)
 deactivate
 #echo $cmd
-exec $cmd
 
+exec $cmd
+popd
