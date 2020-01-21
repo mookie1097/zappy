@@ -11,9 +11,9 @@ source env/bin/activate
 
     echo "install into venv"
 
-    pip3 install --upgrade pip 
+    pip3 install --upgrade pip3
 
-    pip install websockets # pylint # buttplug nodeenv autopep8 flask sh arrow
+    pip3 install websockets pillow # pylint # buttplug nodeenv autopep8 flask sh arrow
 
     pip3 install adafruit-circuitpython-lis3dh adafruit-circuitpython-ssd1306
 
