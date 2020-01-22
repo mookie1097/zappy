@@ -1,0 +1,86 @@
+[
+    {
+        "StopDeviceCmd": {
+            "Id": 1,
+            "DeviceIndex": 0
+        }
+    }
+]
+[
+    {
+        "StopAllDevices": {
+            "Id": 1
+        }
+    }
+]
+  [
+    {
+        "VibrateCmd": {
+            "Id": 1,
+            "DeviceIndex": 0,
+            "Speeds": [
+                {
+                    "Index": 0,
+                    "Speed": 0.5
+                },
+                {
+                    "Index": 1,
+                    "Speed": 1.0
+                }
+            ]
+        }
+    }
+]
+[
+    {
+        "LinearCmd": {
+            "Id": 1,
+            "DeviceIndex": 0,
+            "Vectors": [
+                {
+                    "Index": 0,
+                    "Duration": 500,
+                    "Position": 0.3
+                },
+                {
+                    "Index": 1,
+                    "Duration": 1000,
+                    "Position": 0.8
+                }
+            ]
+        }
+    }
+]
+
+
+  [
+    {
+        "DeviceList": {
+            "Id": 1,
+            "Devices": [
+                {
+                    "DeviceName": "TestDevice 1",
+                    "DeviceIndex": 0,
+                    "DeviceMessages": {
+                        "SingleMotorVibrateCmd": {},
+                        "VibrateCmd": {
+                            "FeatureCount": 2
+                        },
+                        "StopDeviceCmd": {}
+                    }
+                },
+                {
+                    "DeviceName": "TestDevice 2",
+                    "DeviceIndex": 1,
+                    "DeviceMessages": {
+                        "FleshlightLaunchFW12Cmd": {},
+                        "LinearCmd": {
+                            "FeatureCount": 1
+                        },
+                        "StopDeviceCmd": {}
+                    }
+                }
+            ]
+        }
+    }
+]

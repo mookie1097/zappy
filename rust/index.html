@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Zappy time!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- CSS and styleing done by @porglezomp -->
+    <!-- You don't want to know what it looked like before.... -->
+
+    <style>
+        p{
+            margin: 0px;
+
+        }
+        body {
+            padding: 1em;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .row {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+        }
+
+        .col {
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+
+        }
+
+        .col.hcenter {
+            align-items: center;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        .zap-button {
+            background: #b547f5;
+            border: none;
+            border-radius: 8px;
+            width: 100px;
+            height: 100px;
+            margin: 1em;
+        }
+
+        .zap-button:hover {
+            background: #b688d1;
+        }
+
+        .zap-button.btn-active {
+            background: #661c91;
+        }
+
+        .nosel {
+            -moz-user-select: none;
+            -khtml-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+    </style>
+</head>
+
+<body class="col">
+    <ul class="l-none buttons row hcenter">
+ 
+        <li><button class="zap-button nosel" data-type="relay" data-key="1">Relay one</button></li>
+        <li><button class="zap-button nosel" data-type="relay" data-key="2">Relay two</button></li>
+        <li><button class="zap-button nosel" data-type="relay" data-key="3">Relay three</button></li>
+        <li><button class="zap-button nosel" data-type="relay"  data-key="4">Relay four</button></li>
+        <br></br>
+        <li><button class="zap-button nosel" type="channel" data-key="p1">Pair 1</button></li>
+        <li><button class="zap-button nosel" type="channel" data-key="p2">Pair 2</button></li>
+        <li><button class="zap-button nosel" type="subchannel" data-key="p3">Pair 3</button></li>
+        <li><button class="zap-button nosel" type="subchannel" data-key="p4">Pair 4</button></li>
+        <br></br>
+        <li><button class="zap-button nosel" data-key="prog1">Prog 4</button></li>
+
+    </ul>
+
+    <p id="info1"></p>
+    <p id="info2"></p>
+    <p id="info3"></p>
+    <p id="info4"></p>
+    
+    <p id="infop1"></p>
+    <p id="infop2"></p>
+    <p id="infop3"></p>
+    <p id="infop4"></p>
+
+    <p id="infoprog1"></p>
+
+      
+    <p id="debug"></p>
+    <p id="event"></p>
+
+
+    <script>
+        ////Websocket bs
+        var ip = location.hostname;
+        console.log(ip);
+        let socket = new WebSocket(`ws://${ip}:8765`);
+
+        socket.onopen = (event) => {
+            document.getElementById("debug").innerHTML =
+                "[open] Connection established";
+        };
+
+        socket.onmessage = (event) => {
+            document.getElementById(`event`).innerHTML =
+                `[message] Data received from server: ${event.data}`;
+        };
+
+        socket.onclose = (event) => {
+            if (event.wasClean) {
+                document.getElementById("debug").innerHTML =
+                    `[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`;
+            } else {
+                // e.g. server process killed or network down
+                // event.code is usually 1006 in this case
+                document.getElementById("debug").innerHTML = '[close] Connection died';
+            }
+        };
+
+        socket.onerror = (error) => {
+            alert(`[error] ${error.message}`);
+        };
+
+
+        ////////start of other stuff
+        let timers = {};
+        let buttons = {};
+
+        // loop through all <button>s and add event listeners to all of them!
+        // use the data-key as the key in the map
+        for (const button of document.querySelectorAll("button.zap-button")) {
+            buttons[button.dataset.key] = button;
+            // add the even listeners for unclicking
+            for (const evt of ["mouseout", "mouseup", "touchend", "touchcancel"]) {
+                button.addEventListener(evt, () => cancel(button));
+            }
+            // Cancel timers if the touch moves off the touch target.
+            button.addEventListener("touchmove", (e) => {
+                const touches = e.targetTouches;
+                for (let i = 0; i < touches.length; i++) {
+                    const touch = touches.item(i);
+                    const elt = document.elementFromPoint(touch.clientX, touch.clientY);
+                    if (elt != button) {
+                        cancel(button);
+                        return;
+                    }
+                }
+            });
+            // clicking sends the event and starts the timer to continue sending it(every 100ms)!
+            ["onclick", "touchstart", "mousedown"].forEach(evt => button.addEventListener(evt, (e) => {
+                cancel(button);
+                button.classList.add("btn-active");
+                send(button);
+                timers[button.dataset.key] = setInterval(() => send(button), 100);
+                e.preventDefault();
+            }));
+        }
+
+        function send(button) {
+            var data = JSON.stringify({ "number": 1, "state": 1, "name": button.dataset.key}); 
+            console.log(data);
+            console.log(button.dataset.type)
+
+            socket.send(data); //`1${button.dataset.key}`);
+
+            document.getElementById(`info${button.dataset.key}`).innerHTML =
+                `sent for ${button.dataset.key}`;
+        }
+
+        function cancel(btn) {
+            if (btn === null) {
+                for (const button of Object.values(buttons)) {
+                    cancel(button);
+                }
+                return;
+            }
+            var data = JSON.stringify({ "number": 1, "state": 1 , "name": btn.dataset.key}); 
+            console.log(data);
+            socket.send(data); //`1${button.dataset.key}`);
+
+            //socket.send(`0${btn.dataset.key}`);
+            btn.classList.remove("btn-active");
+            if (timers[btn.dataset.key]) {
+                document.getElementById(`info${btn.dataset.key}`).innerHTML = `canceled for ${btn.dataset.key}`
+                clearInterval(timers[btn.dataset.key]);
+                timers[btn.dataset.key] = null;
+            }
+        }
+
+        document.addEventListener("blur", () => cancel(null));
+    </script>
+</body>
+
+</html>
