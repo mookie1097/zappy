@@ -25,23 +25,23 @@ fn main() {
     println!("Config read in");
     //piGpio::testing();
     //println!("gpio test complete");
+    let bad_result: Result<i32, i32> = Err(10);
 
     //meow
     let mut devices = Vec::<Device>::new();
     for device in datamap.devices {
         let mut funcVec = Vec::<Function>::new();
         for func in device.functions {
-                //name instead of type because its reserved
-                let mut channels = Vec::<Channel>::new();
-                for pin in func.pins {
-                    channels.push(Channel { pin: pin })
-                }
-                let dev = Function {
-                    name: func.name.to_string(),
-                    channels: channels,
-                };
-                funcVec.push(dev);
-            
+            //name instead of type because its reserved
+            let mut channels = Vec::<Channel>::new();
+            for pin in func.pins {
+                channels.push(Channel { pin: pin })
+            }
+            let dev = Function {
+                name: func.name.to_string(),
+                channels: channels,
+            };
+            funcVec.push(dev);
         }
 
         let dev = Device {

@@ -9,10 +9,11 @@
     <!-- You don't want to know what it looked like before.... -->
 
     <style>
-        p{
+        p {
             margin: 0px;
 
         }
+
         body {
             padding: 1em;
             max-width: 600px;
@@ -69,18 +70,12 @@
 
 <body class="col">
     <ul class="l-none buttons row hcenter">
- 
-        <li><button class="zap-button nosel" data-type="relay" data-key="1">Relay one</button></li>
-        <li><button class="zap-button nosel" data-type="relay" data-key="2">Relay two</button></li>
-        <li><button class="zap-button nosel" data-type="relay" data-key="3">Relay three</button></li>
-        <li><button class="zap-button nosel" data-type="relay"  data-key="4">Relay four</button></li>
-        <br></br>
-        <li><button class="zap-button nosel" type="channel" data-key="p1">Pair 1</button></li>
-        <li><button class="zap-button nosel" type="channel" data-key="p2">Pair 2</button></li>
-        <li><button class="zap-button nosel" type="subchannel" data-key="p3">Pair 3</button></li>
-        <li><button class="zap-button nosel" type="subchannel" data-key="p4">Pair 4</button></li>
-        <br></br>
-        <li><button class="zap-button nosel" data-key="prog1">Prog 4</button></li>
+
+        <li><button class="zap-button nosel" data-devind=0 data-index=0 data-speed=0. data-key=1>Relay 2</button></li>
+        <li><button class="zap-button nosel" data-devind=4 data-index=6 data-speed=.3 data-key=2>Relay 2</button></li>
+        <li><button class="zap-button nosel" data-devind=5 data-index=7 data-speed=.6 data-key=3>Relay 3</button></li>
+        <li><button class="zap-button nosel" data-devind=2 data-index=5 data-speed=1. data-key=4>Relay 4</button></li>
+
 
     </ul>
 
@@ -88,15 +83,7 @@
     <p id="info2"></p>
     <p id="info3"></p>
     <p id="info4"></p>
-    
-    <p id="infop1"></p>
-    <p id="infop2"></p>
-    <p id="infop3"></p>
-    <p id="infop4"></p>
 
-    <p id="infoprog1"></p>
-
-      
     <p id="debug"></p>
     <p id="event"></p>
 
@@ -166,9 +153,17 @@
                 e.preventDefault();
             }));
         }
-
+        // Id (unsigned int): Message Id
+        // DeviceIndex (unsigned int): Index of device
+        // Speeds (array): Vibration speeds
+        // Index (unsigned int): Index of vibration motor
+        // Speed (double): Vibration speed with a range of [0.0-1.0]
         function send(button) {
-            var data = JSON.stringify({ "number": 1, "state": 1, "name": button.dataset.key}); 
+            var data = JSON.stringify({
+                "Id": Number(button.dataset.key), "DeviceIndex": Number(button.dataset.devind),
+                "Speeds": [{ "Index": Number(button.dataset.index), "Speed": Number(button.dataset.speed) }]
+
+            });
             console.log(data);
             console.log(button.dataset.type)
 
@@ -185,9 +180,9 @@
                 }
                 return;
             }
-            var data = JSON.stringify({ "number": 1, "state": 1 , "name": btn.dataset.key}); 
+            var data = JSON.stringify({ "number": 1, "state": 1, "name": btn.dataset.key });
             console.log(data);
-            socket.send(data); //`1${button.dataset.key}`);
+            //socket.send(data); //`1${button.dataset.key}`);
 
             //socket.send(`0${btn.dataset.key}`);
             btn.classList.remove("btn-active");
