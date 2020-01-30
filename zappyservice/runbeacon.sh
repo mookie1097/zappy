@@ -17,7 +17,7 @@ python3 display.py $ipaddr
 echo bt beacon ip
 sudo hciconfig hci0 up
 sudo hciconfig hci0 leadv 3
-cmd=$(python3 beacon.py $ipaddr:8000)
+cmd=$(python3 beacon.py $ipaddr) #:8000
 echo "running command: $cmd"
 sudo $cmd
 popd
