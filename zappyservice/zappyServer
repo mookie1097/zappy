@@ -31,7 +31,7 @@ startservers(){
     sudo -H -u pi python3 python/socketcontrol.py & # run socket control 
     echo $! > $PIDFILE2
    
-    sudo bash "runbeacon.sh" & # start the BLE beacon
+    sudo bash "runbeacon.sh" # start the BLE beacon
    deactivate
   popd
 }
