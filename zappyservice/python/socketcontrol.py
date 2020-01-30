@@ -15,16 +15,27 @@ async def socket(websocket, path):
 		print(f"message in: {message}")
 		if message == "off":
 			turnOffAll()
-		j = json.loads(message)
-		print("json:", j)
 		
-		setRelay(j['name'], j['state'])
+		messagge   = message.split()
+		offOrOn    = int(message[0])
+		intMessage = int(message[1])
+		print(f"{intMessage}, {offOrOn}")
+		pirelaycontrol.setRelay(intMessage, offOrOn)
 		
-		print(j['name'], j['state'])
-
 		responce = f"recv {message}!"
+
 		await websocket.send(responce) 
 		print(f"> {responce}")
+		# j = json.loads(message)
+		# print("json:", j)
+		
+		# setRelay(j['name'], j['state'])
+		
+		# print(j['name'], j['state'])
+
+		# responce = f"recv {message}!"
+		# await websocket.send(responce) 
+		# print(f"> {responce}")
 
 start_server = websockets.serve(socket, "0.0.0.0", 8765)
 
