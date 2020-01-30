@@ -27,7 +27,8 @@ startservers(){
    source python/env/bin/activate
     #sudo -H -u pi python3 -m http.server 80 & # start simple web server
     #echo $! > $PIDFILE1
-    sudo -H -u pi python3 python/socketcontrol.py & # run socket control 
+    # sudo -H -u pi 
+    python3 python/socketcontrol.py & # run socket control 
     echo $! > $PIDFILE
    
     bash runbeacon.sh # start the BLE beacon
