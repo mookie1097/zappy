@@ -19,6 +19,6 @@ hciconfig hci0 up
 hciconfig hci0 leadv 3
 cmd=$(python3 beacon.py $ipaddr:8000)
 echo "running command: $cmd"
-exec $cmd
+sudo $cmd
 
 popd
