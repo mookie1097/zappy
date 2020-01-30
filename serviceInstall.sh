@@ -10,7 +10,7 @@ pushd python ## in python dir now ##
 
     source env/bin/activate
         echo "install into venv"
-        pip3 install --upgrade pip3
+        pip3 install --upgrade pip
         echo "installing websockets and pillow"
         pip3 install websockets pillow 
         echo "installing adafruit libs"
