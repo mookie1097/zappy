@@ -3,7 +3,7 @@
 pushd zappyservice
 
 sudo apt update
-yes | sudo apt install python3-venv libopenjp2-7-dev libtiff5
+yes | sudo apt install python3-venv libopenjp2-7-dev libtiff5 apache2
 pushd python ## in python dir now ##
     echo "init venv"
     python3 -m venv env
@@ -17,6 +17,8 @@ pushd python ## in python dir now ##
         pip3 install adafruit-circuitpython-lis3dh adafruit-circuitpython-ssd1306
     deactivate
 popd
+
+sudo cp index.html index.js /var/www/html/ 
 
 echo "install service"
 bash setup

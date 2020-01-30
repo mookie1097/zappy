@@ -9,8 +9,7 @@
 # Description:       starts and stops the webserver and websocket for controlling raspberry pi
 ### END INIT INFO
 
-PIDFILE1=/var/run/zappyserver-1.pid
-PIDFILE2=/var/run/zappyserver-2.pid
+PIDFILE=/var/run/zappyserver.pid
 
 #PATH=/home/pi/zappy:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/bin
 
@@ -18,7 +17,7 @@ PIDFILE2=/var/run/zappyserver-2.pid
 pth=/home/pi/zappy/zappyservice
 
 startservers(){
-  if [ -f /var/run/$PIDNAME ] && kill -0 $(cat /var/run/$PIDNAME); then
+  if [ -f /var/run/$PIDFILE ] && kill -0 $(cat /var/run/$PIDFILE); then
     echo 'Service already running' >&2
     return 1
   fi
@@ -26,10 +25,10 @@ startservers(){
   
   pushd $pth #root dir for zappyservice
    source python/env/bin/activate
-    sudo -H -u pi python3 -m http.server 80 & # start simple web server
-    echo $! > $PIDFILE1
+    #sudo -H -u pi python3 -m http.server 80 & # start simple web server
+    #echo $! > $PIDFILE1
     sudo -H -u pi python3 python/socketcontrol.py & # run socket control 
-    echo $! > $PIDFILE2
+    echo $! > $PIDFILE
    
     bash runbeacon.sh # start the BLE beacon
    deactivate
