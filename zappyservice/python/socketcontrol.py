@@ -26,7 +26,7 @@ async def socket(websocket, path):
 		await websocket.send(responce) 
 		print(f"> {responce}")
 
-start_server = websockets.serve(socket, "0.0.0.0", 8765)
+start_server = websockets.serve(socket, "141.212.104.202", 8765)
 
 asyncio.get_event_loop().run_until_complete(start_server)
 asyncio.get_event_loop().run_forever()
