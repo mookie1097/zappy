@@ -3,7 +3,7 @@
 pushd zappyservice
 
 sudo apt update
-sudo apt install python3-venv
+yes | sudo apt install python3-venv
 pushd python ## in python dir now ##
     echo "init venv"
     python3 -m venv env
