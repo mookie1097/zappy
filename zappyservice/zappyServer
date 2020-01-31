@@ -28,9 +28,10 @@ startservers(){
     #sudo -H -u pi python3 -m http.server 80 & # start simple web server
     #echo $! > $PIDFILE1
     # sudo -H -u pi 
+    #pushd python
     python3 python/socketcontrol.py & # run socket control 
     echo $! > $PIDFILE
-   
+    #popd
     bash runbeacon.sh # start the BLE beacon
    deactivate
   popd

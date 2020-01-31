@@ -3,10 +3,13 @@
 
 import asyncio
 import websockets
-#from pirelaycontrol import setRelay, cleanup, turnOffAll
-from psudorelaycontrol import setRelay, cleanup, turnOffAll
+import pirelaycontrol
+from pirelaycontrol import setRelay, cleanup, turnOffAll
+#from psudorelaycontrol import setRelay, cleanup, turnOffAll
 import sys
 import time, json
+
+turnOffAll()
 
 async def socket(websocket, path):
 	while(True):
@@ -20,7 +23,7 @@ async def socket(websocket, path):
 		offOrOn    = int(message[0])
 		intMessage = int(message[1])
 		print(f"{intMessage}, {offOrOn}")
-		pirelaycontrol.setRelay(intMessage, offOrOn)
+		setRelay(intMessage, offOrOn)
 		
 		responce = f"recv {message}!"
 
