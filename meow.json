@@ -1,0 +1,45 @@
+{
+    "version": 0.02,
+    "devices": [
+        {
+            "id": 1,
+            "name": "powerbox",
+            "channels": [
+                {
+                    "id": 1, //output 1
+                    "pins": {
+                        "pos": 1,
+                        "neg": 2
+                    }
+                },
+                {
+                    "id": 2, //output 2
+                    "pins": {
+                        "pos": 3,
+                        "neg": 4
+                    }
+                }
+            ],
+            "powerchangy": [
+                {
+                    "fastswitching": true,
+                    "pin": 5,
+                    "multiplier": 100, //this is a 100x larger pot, changes much more dirastically per step
+                    "step": 256,
+                    "max": 100, //in ohms? idk
+                    "min": 0,
+                    "limit": 199 //for saftey or smth
+                },
+                {
+                    "fastswitching": true,
+                    "pin": 6,
+                    "multiplier": 1, //fine adjustment
+                    "step": 256,
+                    "max": 100, //idk!!
+                    "min": 0, //probably dont need it!!!
+                    "limit": 256
+                }
+            ]
+        }
+    ]
+}
