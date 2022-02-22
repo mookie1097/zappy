@@ -9,7 +9,7 @@ import terminalio
 from adafruit_display_text import label
 import adafruit_displayio_ssd1306
  
-displayio.release_displays()
+displayio.release_dispadafruit_displayio_ssd1306lays()
  
  
 # Use for I2C

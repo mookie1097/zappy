@@ -11,3 +11,7 @@ env/
 node_modules/
 package.json
 rust/target/*
+
+
+adafruit-circuitpython-bundle-5.x-mpy-20200117.zip
+adafruit-circuitpython-bundle-5.x-mpy-20200117/*
